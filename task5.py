@@ -15,21 +15,24 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1069, 804)
+        MainWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.frame.setLineWidth(1)
         self.frame.setObjectName("frame")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.frame)
         self.verticalLayout.setContentsMargins(5, 5, 5, 5)
         self.verticalLayout.setSpacing(3)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frame_2 = QtWidgets.QFrame(self.frame)
-        self.frame_2.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_2.setLineWidth(1)
         self.frame_2.setObjectName("frame_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_2)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -40,16 +43,18 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.frame_5.sizePolicy().hasHeightForWidth())
         self.frame_5.setSizePolicy(sizePolicy)
         self.frame_5.setMaximumSize(QtCore.QSize(200, 16777215))
-        self.frame_5.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame_5.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_5.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_5.setLineWidth(0)
         self.frame_5.setObjectName("frame_5")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame_5)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.frame_10 = QtWidgets.QFrame(self.frame_5)
-        self.frame_10.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_10.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_10.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_10.setLineWidth(0)
         self.frame_10.setObjectName("frame_10")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.frame_10)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
@@ -78,18 +83,101 @@ class Ui_MainWindow(object):
 "")
         self.start_btn.setObjectName("start_btn")
         self.verticalLayout_4.addWidget(self.start_btn)
+        self.check_person_btn = QtWidgets.QPushButton(self.frame_10)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.check_person_btn.sizePolicy().hasHeightForWidth())
+        self.check_person_btn.setSizePolicy(sizePolicy)
+        self.check_person_btn.setMinimumSize(QtCore.QSize(0, 0))
+        self.check_person_btn.setMaximumSize(QtCore.QSize(300, 40))
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.check_person_btn.setFont(font)
+        self.check_person_btn.setStyleSheet("\n"
+"\n"
+"QPushButton {\n"
+"    background-color: rgb(42, 42, 193);\n"
+"color:rgb(255, 255, 255);\n"
+"border-radius:5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(19, 32, 150);\n"
+"}\n"
+"\n"
+"\n"
+"")
+        self.check_person_btn.setObjectName("check_person_btn")
+        self.verticalLayout_4.addWidget(self.check_person_btn)
+        self.check_password_btn = QtWidgets.QPushButton(self.frame_10)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.check_password_btn.sizePolicy().hasHeightForWidth())
+        self.check_password_btn.setSizePolicy(sizePolicy)
+        self.check_password_btn.setMinimumSize(QtCore.QSize(0, 0))
+        self.check_password_btn.setMaximumSize(QtCore.QSize(300, 40))
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.check_password_btn.setFont(font)
+        self.check_password_btn.setStyleSheet("\n"
+"\n"
+"QPushButton {\n"
+"    background-color: rgb(42, 42, 193);\n"
+"color:rgb(255, 255, 255);\n"
+"border-radius:5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(19, 32, 150);\n"
+"}\n"
+"\n"
+"\n"
+"")
+        self.check_password_btn.setObjectName("check_password_btn")
+        self.verticalLayout_4.addWidget(self.check_password_btn)
+        self.check_group_btn = QtWidgets.QPushButton(self.frame_10)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.check_group_btn.sizePolicy().hasHeightForWidth())
+        self.check_group_btn.setSizePolicy(sizePolicy)
+        self.check_group_btn.setMinimumSize(QtCore.QSize(0, 0))
+        self.check_group_btn.setMaximumSize(QtCore.QSize(300, 40))
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.check_group_btn.setFont(font)
+        self.check_group_btn.setStyleSheet("\n"
+"\n"
+"QPushButton {\n"
+"    background-color: rgb(42, 42, 193);\n"
+"color:rgb(255, 255, 255);\n"
+"border-radius:5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(19, 32, 150);\n"
+"}\n"
+"\n"
+"\n"
+"")
+        self.check_group_btn.setObjectName("check_group_btn")
+        self.verticalLayout_4.addWidget(self.check_group_btn)
         self.verticalLayout_2.addWidget(self.frame_10)
         self.frame_11 = QtWidgets.QFrame(self.frame_5)
-        self.frame_11.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_11.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_11.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_11.setLineWidth(0)
         self.frame_11.setObjectName("frame_11")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame_11)
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_4.setSpacing(0)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.frame_12 = QtWidgets.QFrame(self.frame_11)
-        self.frame_12.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_12.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_12.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_12.setLineWidth(0)
         self.frame_12.setObjectName("frame_12")
         self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.frame_12)
         self.verticalLayout_8.setObjectName("verticalLayout_8")
@@ -107,8 +195,9 @@ class Ui_MainWindow(object):
         self.verticalLayout_8.addWidget(self.Pesron4)
         self.horizontalLayout_4.addWidget(self.frame_12)
         self.frame_13 = QtWidgets.QFrame(self.frame_11)
-        self.frame_13.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_13.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_13.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_13.setLineWidth(0)
         self.frame_13.setObjectName("frame_13")
         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.frame_13)
         self.verticalLayout_7.setObjectName("verticalLayout_7")
@@ -128,8 +217,9 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.frame_11)
         self.horizontalLayout_2.addWidget(self.frame_5)
         self.frame_6 = QtWidgets.QFrame(self.frame_2)
-        self.frame_6.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_6.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_6.setLineWidth(1)
         self.frame_6.setObjectName("frame_6")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_6)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -158,14 +248,16 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.frame_6)
         self.verticalLayout.addWidget(self.frame_2)
         self.frame_3 = QtWidgets.QFrame(self.frame)
-        self.frame_3.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame_3.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_3.setLineWidth(0)
         self.frame_3.setObjectName("frame_3")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frame_3)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.frame_7 = QtWidgets.QFrame(self.frame_3)
         self.frame_7.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_7.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_7.setLineWidth(1)
         self.frame_7.setObjectName("frame_7")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.frame_7)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
@@ -182,14 +274,16 @@ class Ui_MainWindow(object):
         self.label_3.setObjectName("label_3")
         self.verticalLayout_5.addWidget(self.label_3)
         self.frame_4 = QtWidgets.QFrame(self.frame_7)
-        self.frame_4.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame_4.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_4.setLineWidth(0)
         self.frame_4.setObjectName("frame_4")
         self.verticalLayout_5.addWidget(self.frame_4)
         self.horizontalLayout_3.addWidget(self.frame_7)
         self.frame_8 = QtWidgets.QFrame(self.frame_3)
         self.frame_8.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_8.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_8.setLineWidth(1)
         self.frame_8.setObjectName("frame_8")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.frame_8)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
@@ -206,13 +300,15 @@ class Ui_MainWindow(object):
         self.label_4.setObjectName("label_4")
         self.verticalLayout_6.addWidget(self.label_4)
         self.frame_9 = QtWidgets.QFrame(self.frame_8)
-        self.frame_9.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame_9.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_9.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_9.setLineWidth(0)
         self.frame_9.setObjectName("frame_9")
         self.verticalLayout_6.addWidget(self.frame_9)
         self.horizontalLayout_3.addWidget(self.frame_8)
         self.verticalLayout.addWidget(self.frame_3)
         self.result_label = QtWidgets.QLabel(self.frame)
+        self.result_label.setMaximumSize(QtCore.QSize(16777215, 70))
         font = QtGui.QFont()
         font.setPointSize(24)
         font.setBold(True)
@@ -258,6 +354,9 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.start_btn.setText(_translate("MainWindow", "Start Recording"))
+        self.check_person_btn.setText(_translate("MainWindow", "Check Person"))
+        self.check_password_btn.setText(_translate("MainWindow", "Check Password"))
+        self.check_group_btn.setText(_translate("MainWindow", "Check Group"))
         self.Pesron1.setText(_translate("MainWindow", "Pesron 1"))
         self.Pesron2.setText(_translate("MainWindow", "Pesron 2"))
         self.Pesron3.setText(_translate("MainWindow", "Pesron 3"))
