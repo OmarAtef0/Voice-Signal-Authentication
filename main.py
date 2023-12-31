@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
+from PyQt5.QtGui import QIcon
 from task5 import Ui_MainWindow
 import qdarkstyle
 from PyQt5.QtWidgets import QApplication
@@ -45,6 +46,7 @@ class PreCalculate:
                     'f_amplitude': f_amplitude,
                     'phase': phase
                 }
+                
         return data_dict
 
     def prefind_fft(self):
@@ -62,16 +64,15 @@ class VoiceSignalAuthentication(QMainWindow):
         # pre_calculator = PreCalculate()
         # self.open_dict, self.unlock_dict, self.grant_dict = pre_calculator.prefind_fft()
         # print(self.open_dict[1])
-
-        print("CALCULATED")
+        # print("CALCULATED")
 
         # Initialize SpeechRecognition components
-        self.recognizer = Recognizer()
-        self.microphone = Microphone()
+        # self.recognizer = Recognizer()
+        # self.microphone = Microphone()
 
         self.is_recording = False 
         self.recorded = False
-        self.file_path = "dataset\\recorded\\1.wav"
+        self.record_file = "dataset\\recorded\\1.wav"
 
         self.input_audio_data = {}
        
@@ -81,19 +82,19 @@ class VoiceSignalAuthentication(QMainWindow):
         self.is_recording = True
 
         try:
-            recorder.record_audio(5, self.file_path)
+            recorder.record_audio(3, self.record_file)
             self.recorded = True
         except Exception as e:
             print(f"Error recording: {e}")
 
-        self.open_audio(self.file_path)
-        self.process_audio()
+        self.open_audio(self.record_file)
+        # self.process_audio()
     
     def process_audio(self):
         print("PROCESSING")
         recognizer = Recognizer()
 
-        with AudioFile(self.file_path) as audio_file:
+        with AudioFile(self.record_file) as audio_file:
             audio_data = recognizer.record(audio_file, duration=5)  
             try:
                 spoken_sentence = recognizer.recognize_google(audio_data)
@@ -107,30 +108,6 @@ class VoiceSignalAuthentication(QMainWindow):
         print("sentence check: ",sentence_correct)
         if sentence_correct:
             self.check_person(spoken_sentence)
-        
-    def open_audio(self, file_path):
-        print("OPENED")
-        samples, sample_rate = librosa.load(file_path, sr=None)
-
-        if self.recorded:
-            self.plot_spectrogram(samples, sample_rate)
-            
-        fft_result = np.fft.fft(samples)
-        frequency = np.fft.fftfreq(len(fft_result), d=1/sample_rate)
-        
-        positive_frequency = frequency[frequency >= 0]
-        f_amplitude = np.abs(fft_result[frequency >= 0])
-        phase = np.angle(fft_result[frequency >= 0])
-
-        self.input_audio_data = {
-            'samples': samples,
-            'sample_rate': sample_rate,
-            'fft_result': fft_result,
-            'frequency': frequency,
-            'positive_frequencies': positive_frequency,
-            'f_amplitude': f_amplitude,
-            'phase': phase
-        }
 
     def plot_spectrogram(self, samples, sample_rate):
         print("PLOTTED")
@@ -154,44 +131,44 @@ class VoiceSignalAuthentication(QMainWindow):
     #     return any(sentence in spoken_sentence for sentence in valid_sentences)
     
     def sentence_check(self):
+        pass  
         
-        audio1 = self.input_audio_data
-        # loop over the 10 random audios
-        audio2 = {0}
+    def open_audio(self, file_path):
+        print("OPENED")
+        self.reference_audio, sample_rate = librosa.load(file_path, sr=None)
+
+        if self.recorded:
+            self.plot_spectrogram(self.reference_audio, sample_rate)
+
+        self.check_person()
         
+    def check_person(self):
+        folder_path = 'dataset\\mode_1_data'
+        files = os.listdir(folder_path)
+        similarity_percentages = {}
 
-        #COMPARE BETWEEN 2 AUDIOS
+        # frequency amplitudes | spectrogram 
 
-        # 'samples': samples,
-        # 'sample_rate': sample_rate,
-        # 'fft_result': fft_result,
-        # 'frequency': frequency,
-        # 'positive_frequencies': positive_frequency,
-        # 'amplitude': amplitude,
-        # 'phase': phase
-        
+        for file in files:
+            self.current_audio, sr_current = librosa.load(os.path.join(folder_path, file))
+            min_length = min(len(self.reference_audio), len(self.current_audio))
+            
+            self.reference_audio = self.reference_audio[:min_length]
+            self.current_audio = self.current_audio[:min_length]
 
-    def check_person(self, spoken_sentence):
-        for i in range(1,11):
-            audio1 = self.input_audio_data
+            ref_stft_result = librosa.stft(self.reference_audio)
+            self.ref_f_amplitude = np.abs(ref_stft_result)
+            self.ref_spectrogram = np.abs(librosa.stft(self.reference_audio))
 
-            if spoken_sentence == "open middle door":
-                audio2 = self.open_dict[i]
-            elif spoken_sentence == "unlock the gate":
-                audio2 = self.unlock_dict[i]
-            elif spoken_sentence == "grant me access":
-                audio2 = self.grant_dict[i]    
+            stft_result = librosa.stft(self.current_audio)
+            self.f_amplitude = np.abs(stft_result)
+            self.spectrogram = np.abs(librosa.stft(self.current_audio))
+            
+            correlation_matrix = np.corrcoef(self.ref_f_amplitude, self.f_amplitude)
+            absolute_correlation = np.abs(correlation_matrix)
+            similarity_percentage = np.mean(absolute_correlation) * 100
 
-            #COMPARE BETWEEN 2 AUDIOS
-
-            # 'samples': samples,
-            # 'sample_rate': sample_rate,
-            # 'fft_result': fft_result,
-            # 'frequency': frequency,
-            # 'positive_frequencies': positive_frequency,
-            # 'amplitude': amplitude,
-            # 'phase': phase
-
+            print(f"{self.record_file} and {file}: {similarity_percentage:.2f}%")
             
 
 if __name__ == "__main__":
@@ -199,7 +176,7 @@ if __name__ == "__main__":
     window = VoiceSignalAuthentication()
     window.setWindowTitle("Voice Signal Authentication")
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt6())
-    # app.setWindowIcon(QIcon("assets/logo.jpg"))
-    window.resize(1450,950)
+    app.setWindowIcon(QIcon("assets/logo.jpg"))
+    window.resize(1150,750)
     window.show()
     sys.exit(app.exec_())

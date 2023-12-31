@@ -4,80 +4,70 @@ import os
 import matplotlib.pyplot as plt
 
 def calculate_similarity_percentage(correlation_matrix):
-    # Use the absolute correlation values
     absolute_correlation = np.abs(correlation_matrix)
-
-    # Calculate the average similarity percentage
+    
     similarity_percentage = np.mean(absolute_correlation) * 100
 
     return similarity_percentage
 
 def main():
-    # Replace 'record.wav' with the name of your reference audio
-    reference_audio_name = 'record.wav'
-    
-    # Replace 'dataset\\test' with the path to your audio files
-    folder_path = 'dataset\\test'
+    reference_audio_name = 'dataset\open middle door\omar\omar_open_middle_door_1.wav'
+    reference_audio, sr_reference = librosa.load(reference_audio_name)
 
-    # List all files in the folder
+    ref_stft_result = librosa.stft(reference_audio)
+    ref_f_amplitude = np.abs(ref_stft_result)
+
+    # ref_chroma = librosa.feature.chroma_stft(y=reference_audio, sr=sr_reference)
+    # ref_zero_crossing_rate = librosa.feature.zero_crossing_rate(reference_audio)
+    ref_spectrogram = np.abs(librosa.stft(reference_audio))
+    # ref_spectral_contrast = librosa.feature.spectral_contrast(y=reference_audio, sr=sr_reference)
+    # ref_mfccs = librosa.feature.mfcc(y=reference_audio, sr=sr_reference, n_mfcc=13)
+
+    folder_path = 'dataset\\mode_1_data'
     files = os.listdir(folder_path)
-
-    # Find the index of the reference audio
-    record_index = files.index(reference_audio_name)
-    
-    # Remove the reference audio from the list
-    del files[record_index]
-
-    # Load the reference audio
-    reference_audio, sr_reference = librosa.load(os.path.join(folder_path, reference_audio_name))
-
-    # Initialize a dictionary to store similarity percentages
     similarity_percentages = {}
 
-    # Iterate over the remaining audios
-    for file in files:
-        # Load the current audio
-        current_audio, sr_current = librosa.load(os.path.join(folder_path, file))
+    # frequency amplitudes | spectrogram 
 
-        # Ensure both audio signals have the same length
+    for file in files:
+        current_audio, sr_current = librosa.load(os.path.join(folder_path, file))
         min_length = min(len(reference_audio), len(current_audio))
+
         reference_audio = reference_audio[:min_length]
         current_audio = current_audio[:min_length]
 
-        # Compute 2D correlation
-        correlation_matrix = np.corrcoef(reference_audio, current_audio)
+        stft_result = librosa.stft(current_audio)
+        f_amplitude = np.abs(stft_result)
 
-        # Calculate similarity percentage
-        similarity_percentage = calculate_similarity_percentage(correlation_matrix)
+        # chroma = librosa.feature.chroma_stft(y=current_audio, sr=sr_current)
+        # zero_crossing_rate = librosa.feature.zero_crossing_rate(current_audio)
+        spectrogram = np.abs(librosa.stft(current_audio))
+        # spectral_contrast = librosa.feature.spectral_contrast(y=current_audio, sr=sr_current)
+        # mfccs = librosa.feature.mfcc(y=current_audio, sr=sr_current, n_mfcc=13)
         
-        # Print similarity percentage
-        print(f"Similarity Percentage between {reference_audio_name} and {file}: {similarity_percentage:.2f}%")
+        correlation_matrix = np.corrcoef(ref_spectrogram, spectrogram)
 
-        # Plot the two audio signals and the correlation matrix
-        plt.figure(figsize=(10, 6))
+        similarity_percentage = calculate_similarity_percentage(correlation_matrix)
+        print(f"{reference_audio_name} and {file}: {similarity_percentage:.2f}%")
 
-        plt.subplot(3, 1, 1)
-        plt.plot(reference_audio)
-        plt.title(f'{reference_audio_name}')
+        # plt.figure(figsize=(10, 6))
 
-        plt.subplot(3, 1, 2)
-        plt.plot(current_audio)
-        plt.title(f'{file}')
+        # plt.subplot(3, 1, 1)
+        # plt.plot(reference_audio)
+        # plt.title(f'{reference_audio_name}')
 
-        plt.subplot(3, 1, 3)
-        plt.imshow(correlation_matrix, cmap='viridis', aspect='auto')
-        plt.title('Correlation Matrix')
+        # plt.subplot(3, 1, 2)
+        # plt.plot(current_audio)
+        # plt.title(f'{file}')
 
-        plt.tight_layout()
-        plt.show()
+        # plt.subplot(3, 1, 3)
+        # plt.imshow(correlation_matrix, cmap='viridis', aspect='auto')
+        # plt.title('Correlation Matrix')
 
-        # Store the similarity percentage in the dictionary
+        # plt.tight_layout()
+        # plt.show()
+
         similarity_percentages[file] = similarity_percentage
-
-    # Print the similarity percentages for all comparisons
-    print("\nSimilarity Percentages:")
-    for file, similarity_percentage in similarity_percentages.items():
-        print(f"{file}: {similarity_percentage:.2f}%")
 
 if __name__ == "__main__":
     main()

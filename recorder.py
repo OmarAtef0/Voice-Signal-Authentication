@@ -8,5 +8,3 @@ def record_audio(duration, filename):
   sd.wait()
   wv.write(filename, recording, fs, sampwidth=2)
 
-if __name__ == "__main__":
-  record_audio(duration=10, filename="recording.wav")
