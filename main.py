@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import librosa
 from sklearn.metrics.pairwise import cosine_similarity
 import recorder
+import os
 
 plt.rcParams['axes.facecolor'] = 'black'       # Background color of the plot area
 plt.rc('axes', edgecolor='w')                  # Edge color of the plot area
@@ -24,27 +25,30 @@ class PreCalculate:
     def process_audio_data(self, label, individuals):
         data_dict = {}
         for i in individuals:
-            samples, sample_rate = librosa.load(f"dataset/{label}/{i}.mp3", sr=None)
-            fft_result = np.fft.fft(samples)
-            frequency = np.fft.fftfreq(len(fft_result), d=1/sample_rate)
-            
-            positive_frequency = frequency[frequency >= 0]
-            f_amplitude = np.abs(fft_result[frequency >= 0])
-            phase = np.angle(fft_result[frequency >= 0])
+            files = os.listdir(f"dataset/{label}/{i}")
+            for file in files:
+                print(file)
+                samples, sample_rate = librosa.load(file, sr=None)
+                fft_result = np.fft.fft(samples)
+                frequency = np.fft.fftfreq(len(fft_result), d=1/sample_rate)
+                
+                positive_frequency = frequency[frequency >= 0]
+                f_amplitude = np.abs(fft_result[frequency >= 0])
+                phase = np.angle(fft_result[frequency >= 0])
 
-            data_dict[i] = {
-                'samples': samples,
-                'sample_rate': sample_rate,
-                'fft_result': fft_result,
-                'frequency': frequency,
-                'positive_frequencies': positive_frequency,
-                'f_amplitude': f_amplitude,
-                'phase': phase
-            }
+                data_dict[i] = {
+                    'samples': samples,
+                    'sample_rate': sample_rate,
+                    'fft_result': fft_result,
+                    'frequency': frequency,
+                    'positive_frequencies': positive_frequency,
+                    'f_amplitude': f_amplitude,
+                    'phase': phase
+                }
         return data_dict
 
     def prefind_fft(self):
-        individuals = [1, 2, 3, 4, 5, 6, 7, 8]
+        individuals = ["omar"]
 
         return self.process_audio_data("open middle door", individuals), self.process_audio_data("unlock the gate", individuals), self.process_audio_data("grant me access", individuals)
 
@@ -55,9 +59,9 @@ class VoiceSignalAuthentication(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)  
 
-        pre_calculator = PreCalculate()
-        self.open_dict, self.unlock_dict, self.grant_dict = pre_calculator.prefind_fft()
-        print(self.open_dict[1])
+        # pre_calculator = PreCalculate()
+        # self.open_dict, self.unlock_dict, self.grant_dict = pre_calculator.prefind_fft()
+        # print(self.open_dict[1])
 
         print("CALCULATED")
 
