@@ -29,7 +29,7 @@ class PreCalculate:
             frequency = np.fft.fftfreq(len(fft_result), d=1/sample_rate)
             
             positive_frequency = frequency[frequency >= 0]
-            amplitude = np.abs(fft_result[frequency >= 0])
+            f_amplitude = np.abs(fft_result[frequency >= 0])
             phase = np.angle(fft_result[frequency >= 0])
 
             data_dict[i] = {
@@ -38,7 +38,7 @@ class PreCalculate:
                 'fft_result': fft_result,
                 'frequency': frequency,
                 'positive_frequencies': positive_frequency,
-                'amplitude': amplitude,
+                'f_amplitude': f_amplitude,
                 'phase': phase
             }
         return data_dict
@@ -115,7 +115,7 @@ class VoiceSignalAuthentication(QMainWindow):
         frequency = np.fft.fftfreq(len(fft_result), d=1/sample_rate)
         
         positive_frequency = frequency[frequency >= 0]
-        amplitude = np.abs(fft_result[frequency >= 0])
+        f_amplitude = np.abs(fft_result[frequency >= 0])
         phase = np.angle(fft_result[frequency >= 0])
 
         self.input_audio_data = {
@@ -124,7 +124,7 @@ class VoiceSignalAuthentication(QMainWindow):
             'fft_result': fft_result,
             'frequency': frequency,
             'positive_frequencies': positive_frequency,
-            'amplitude': amplitude,
+            'f_amplitude': f_amplitude,
             'phase': phase
         }
 
@@ -145,9 +145,27 @@ class VoiceSignalAuthentication(QMainWindow):
         axes.set_xlabel('Time (s)', color='white')
         axes.set_ylabel('Frequency (Hz)', color='white')
 
-    def sentence_check(self, spoken_sentence):
-        valid_sentences = ["open middle door", "unlock the gate", "grant me access"]
-        return any(sentence in spoken_sentence for sentence in valid_sentences)
+    # def sentence_check(self, spoken_sentence):
+    #     valid_sentences = ["open middle door", "unlock the gate", "grant me access"]
+    #     return any(sentence in spoken_sentence for sentence in valid_sentences)
+    
+    def sentence_check(self):
+        
+        audio1 = self.input_audio_data
+        # loop over the 10 random audios
+        audio2 = {0}
+        
+
+        #COMPARE BETWEEN 2 AUDIOS
+
+        # 'samples': samples,
+        # 'sample_rate': sample_rate,
+        # 'fft_result': fft_result,
+        # 'frequency': frequency,
+        # 'positive_frequencies': positive_frequency,
+        # 'amplitude': amplitude,
+        # 'phase': phase
+        
 
     def check_person(self, spoken_sentence):
         for i in range(1,11):
