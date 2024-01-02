@@ -83,18 +83,18 @@ class Ui_MainWindow(object):
 "")
         self.start_btn.setObjectName("start_btn")
         self.verticalLayout_4.addWidget(self.start_btn)
-        self.check_person_btn = QtWidgets.QPushButton(self.frame_10)
+        self.check_btn = QtWidgets.QPushButton(self.frame_10)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.check_person_btn.sizePolicy().hasHeightForWidth())
-        self.check_person_btn.setSizePolicy(sizePolicy)
-        self.check_person_btn.setMinimumSize(QtCore.QSize(0, 0))
-        self.check_person_btn.setMaximumSize(QtCore.QSize(300, 40))
+        sizePolicy.setHeightForWidth(self.check_btn.sizePolicy().hasHeightForWidth())
+        self.check_btn.setSizePolicy(sizePolicy)
+        self.check_btn.setMinimumSize(QtCore.QSize(0, 0))
+        self.check_btn.setMaximumSize(QtCore.QSize(300, 40))
         font = QtGui.QFont()
         font.setBold(True)
-        self.check_person_btn.setFont(font)
-        self.check_person_btn.setStyleSheet("\n"
+        self.check_btn.setFont(font)
+        self.check_btn.setStyleSheet("\n"
 "\n"
 "QPushButton {\n"
 "    background-color: rgb(42, 42, 193);\n"
@@ -108,62 +108,8 @@ class Ui_MainWindow(object):
 "\n"
 "\n"
 "")
-        self.check_person_btn.setObjectName("check_person_btn")
-        self.verticalLayout_4.addWidget(self.check_person_btn)
-        self.check_password_btn = QtWidgets.QPushButton(self.frame_10)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.check_password_btn.sizePolicy().hasHeightForWidth())
-        self.check_password_btn.setSizePolicy(sizePolicy)
-        self.check_password_btn.setMinimumSize(QtCore.QSize(0, 0))
-        self.check_password_btn.setMaximumSize(QtCore.QSize(300, 40))
-        font = QtGui.QFont()
-        font.setBold(True)
-        self.check_password_btn.setFont(font)
-        self.check_password_btn.setStyleSheet("\n"
-"\n"
-"QPushButton {\n"
-"    background-color: rgb(42, 42, 193);\n"
-"color:rgb(255, 255, 255);\n"
-"border-radius:5px;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(19, 32, 150);\n"
-"}\n"
-"\n"
-"\n"
-"")
-        self.check_password_btn.setObjectName("check_password_btn")
-        self.verticalLayout_4.addWidget(self.check_password_btn)
-        self.check_group_btn = QtWidgets.QPushButton(self.frame_10)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.check_group_btn.sizePolicy().hasHeightForWidth())
-        self.check_group_btn.setSizePolicy(sizePolicy)
-        self.check_group_btn.setMinimumSize(QtCore.QSize(0, 0))
-        self.check_group_btn.setMaximumSize(QtCore.QSize(300, 40))
-        font = QtGui.QFont()
-        font.setBold(True)
-        self.check_group_btn.setFont(font)
-        self.check_group_btn.setStyleSheet("\n"
-"\n"
-"QPushButton {\n"
-"    background-color: rgb(42, 42, 193);\n"
-"color:rgb(255, 255, 255);\n"
-"border-radius:5px;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(19, 32, 150);\n"
-"}\n"
-"\n"
-"\n"
-"")
-        self.check_group_btn.setObjectName("check_group_btn")
-        self.verticalLayout_4.addWidget(self.check_group_btn)
+        self.check_btn.setObjectName("check_btn")
+        self.verticalLayout_4.addWidget(self.check_btn)
         self.verticalLayout_2.addWidget(self.frame_10)
         self.frame_11 = QtWidgets.QFrame(self.frame_5)
         self.frame_11.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -307,16 +253,36 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.addWidget(self.frame_9)
         self.horizontalLayout_3.addWidget(self.frame_8)
         self.verticalLayout.addWidget(self.frame_3)
-        self.result_label = QtWidgets.QLabel(self.frame)
-        self.result_label.setMaximumSize(QtCore.QSize(16777215, 70))
+        self.result_label_3 = QtWidgets.QLabel(self.frame)
+        self.result_label_3.setMaximumSize(QtCore.QSize(16777215, 70))
         font = QtGui.QFont()
         font.setPointSize(24)
         font.setBold(True)
-        self.result_label.setFont(font)
-        self.result_label.setStyleSheet("color: rgb(220, 0, 4);")
-        self.result_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.result_label.setObjectName("result_label")
-        self.verticalLayout.addWidget(self.result_label)
+        self.result_label_3.setFont(font)
+        self.result_label_3.setStyleSheet("color: rgb(220, 0, 4);")
+        self.result_label_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.result_label_3.setObjectName("result_label_3")
+        self.verticalLayout.addWidget(self.result_label_3)
+        self.result_label_1 = QtWidgets.QLabel(self.frame)
+        self.result_label_1.setMaximumSize(QtCore.QSize(16777215, 70))
+        font = QtGui.QFont()
+        font.setPointSize(24)
+        font.setBold(True)
+        self.result_label_1.setFont(font)
+        self.result_label_1.setStyleSheet("color: rgb(220, 0, 4);")
+        self.result_label_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.result_label_1.setObjectName("result_label_1")
+        self.verticalLayout.addWidget(self.result_label_1)
+        self.result_label_2 = QtWidgets.QLabel(self.frame)
+        self.result_label_2.setMaximumSize(QtCore.QSize(16777215, 70))
+        font = QtGui.QFont()
+        font.setPointSize(24)
+        font.setBold(True)
+        self.result_label_2.setFont(font)
+        self.result_label_2.setStyleSheet("color: rgb(220, 0, 4);")
+        self.result_label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.result_label_2.setObjectName("result_label_2")
+        self.verticalLayout.addWidget(self.result_label_2)
         self.horizontalLayout.addWidget(self.frame)
         MainWindow.setCentralWidget(self.centralwidget)
         self.actionOpen = QtWidgets.QAction(MainWindow)
@@ -354,21 +320,21 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.start_btn.setText(_translate("MainWindow", "Start Recording"))
-        self.check_person_btn.setText(_translate("MainWindow", "Check Person"))
-        self.check_password_btn.setText(_translate("MainWindow", "Check Password"))
-        self.check_group_btn.setText(_translate("MainWindow", "Check Group"))
-        self.Pesron1.setText(_translate("MainWindow", "Pesron 1"))
-        self.Pesron2.setText(_translate("MainWindow", "Pesron 2"))
-        self.Pesron3.setText(_translate("MainWindow", "Pesron 3"))
-        self.Pesron4.setText(_translate("MainWindow", "Pesron 4"))
-        self.Pesron5.setText(_translate("MainWindow", "Pesron 5"))
-        self.Pesron6.setText(_translate("MainWindow", "Pesron 6"))
+        self.check_btn.setText(_translate("MainWindow", "Check Permission"))
+        self.Pesron1.setText(_translate("MainWindow", "Ibrahim"))
+        self.Pesron2.setText(_translate("MainWindow", "Omar"))
+        self.Pesron3.setText(_translate("MainWindow", "Hazem"))
+        self.Pesron4.setText(_translate("MainWindow", "Ahmed Ali"))
+        self.Pesron5.setText(_translate("MainWindow", "Mohannad"))
+        self.Pesron6.setText(_translate("MainWindow", "Hassan"))
         self.Pesron7.setText(_translate("MainWindow", "Pesron 7"))
         self.Pesron8.setText(_translate("MainWindow", "Pesron 8"))
         self.SpectrogramBox.setTitle(_translate("MainWindow", "Spectrogram"))
         self.label_3.setText(_translate("MainWindow", "Tabel 1"))
         self.label_4.setText(_translate("MainWindow", "Tabel 2"))
-        self.result_label.setText(_translate("MainWindow", "Access Denied"))
+        self.result_label_3.setText(_translate("MainWindow", "-"))
+        self.result_label_1.setText(_translate("MainWindow", "-"))
+        self.result_label_2.setText(_translate("MainWindow", "-"))
         self.actionOpen.setText(_translate("MainWindow", "Open"))
         self.actionUniform_Range_Mode.setText(_translate("MainWindow", "Uniform Range Mode"))
         self.actionMusical_Instruments_Mode.setText(_translate("MainWindow", "Musical Instruments Mode"))

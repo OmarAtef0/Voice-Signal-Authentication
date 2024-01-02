@@ -34,13 +34,11 @@ class VoiceSignalAuthentication(QMainWindow):
         self.record_file = "dataset\\recorded\\1.wav"
        
         self.ui.start_btn.clicked.connect(self.start_recording)
-        self.ui.check_person_btn.clicked.connect(self.check_person)
-        self.ui.check_password_btn.clicked.connect(self.check_password)
-        self.ui.check_group_btn.clicked.connect(self.check_group)
+        self.ui.check_btn.clicked.connect(self.check_password)
 
-        self.ingroup_model = pickle.load(open("ingroup.pkl", "rb"))
-        self.processing_model = pickle.load(open("processing.pkl", "rb"))
-        self.password_model = pickle.load(open("password.pkl", "rb"))
+        # self.ingroup_model = pickle.load(open("ingroup.pkl", "rb"))
+        self.processing_model = pickle.load(open("ML/processing.pkl", "rb"))
+        self.password_model = pickle.load(open("ML/password.pkl", "rb"))
 
     def start_recording(self):
         try:
@@ -74,6 +72,9 @@ class VoiceSignalAuthentication(QMainWindow):
 
         if self.recorded:
             self.plot_spectrogram(self.reference_audio, sample_rate)
+
+        # extract audio features
+        self.features = self.features_extractor(self.record_file)
         
     def mfcc_feature_extractor(self, audio, sampleRate):
         print("called")
@@ -117,26 +118,82 @@ class VoiceSignalAuthentication(QMainWindow):
 
     def check_password(self):
         # password sentence -> password model
-        features = self.features_extractor(self.record_file)
-        password_model_prediction = self.password_model.predict(features)
-        print(password_model_prediction)
+        password_model_prediction = self.password_model.predict(self.features)
+        probabilities = self.password_model.predict_proba(self.features)
+        print("password: ", probabilities)
+        
         if password_model_prediction == 0:
-            print("True")
-            self.ui.result_label.setText("Password is Correct, Access Granted!")
-            self.ui.result_label.setStyleSheet("color: rgb(70, 255, 70);")
+            self.ui.result_label_1.setText("Password is Correct, Access Granted!")
+            self.ui.result_label_1.setStyleSheet("color: rgb(70, 255, 70);")
         else:
-            print("False")
-            self.ui.result_label.setText("Password is Incorrect, Access Denied!")
-            self.ui.result_label.setStyleSheet("color: rgb(220, 0, 4);")
-
-    def check_group(self):
-        # password sentence -> password model
-        pass  
+            self.ui.result_label_1.setText("Password is Incorrect, Access Denied!")
+            self.ui.result_label_1.setStyleSheet("color: rgb(220, 0, 4);")
+        
+        self.check_person()
 
     def check_person(self):
         # meen el person -> processing model
-        # self.processing_model
-        pass
+        # person_prediction = self.processing_model.predict(self.features)
+
+        probabilities = self.processing_model.predict_proba(self.features)
+        print("persons: ", probabilities)
+
+        for i in range(len(self.features)):
+            class_pred_index = probabilities[i].argmax()  
+            class_pred = probabilities[i, class_pred_index]  
+            threshold = 0.70
+            
+            if class_pred > threshold:
+                person_prediction = class_pred_index
+            else:
+                person_prediction =  7
+        
+        self.person = ""
+
+        if person_prediction == 0:
+            self.person = "Ahmed Ali"
+        elif person_prediction == 1:
+            self.person = "Ahmed Khaled"
+        elif person_prediction == 2:
+            self.person = "Hassan"
+        elif person_prediction == 3:
+            self.person = "Hazem"
+        elif person_prediction == 4:
+            self.person = "Ibrahim"
+        elif person_prediction == 5:
+            self.person = "Mohannad"
+        elif person_prediction == 6:
+            self.person = "Omar"
+        elif person_prediction == 7:
+            self.person = "other"
+        
+        if self.person == "other":
+            self.ui.result_label_3.setText(f"Person not recognized! , Access Denied!")
+            self.ui.result_label_3.setStyleSheet("color: rgb(220, 0, 4);")
+        else:
+            self.ui.result_label_3.setText(f"Welcome {self.person} , Access Granted!")
+            self.ui.result_label_3.setStyleSheet("color: rgb(70, 255, 70);")
+
+        self.check_group()
+
+    def check_group(self):
+        # ingroup wla la-> ingroup model
+        self.checkboxes = {"Ibrahim": self.ui.Pesron1, "Omar": self.ui.Pesron2, "Hazem": self.ui.Pesron3, "Ahmed Ali": self.ui.Pesron4, 
+                           "Mohannad": self.ui.Pesron5,"Hassan": self.ui.Pesron6,}
+        self.granted_persons = []
+        for name ,checkbox in self.checkboxes.items():
+            if checkbox.isChecked():
+                self.granted_persons.append(name)
+
+        print("granted persons: ", self.granted_persons)
+
+        print("talking peson: ",self.person)
+        if self.person in self.granted_persons:
+            self.ui.result_label_2.setText("Person Ingroup , Access Granted!")
+            self.ui.result_label_2.setStyleSheet("color: rgb(70, 255, 70);")
+        else:
+            self.ui.result_label_2.setText("Person NOT Ingroup, Access Denied!")
+            self.ui.result_label_2.setStyleSheet("color: rgb(220, 0, 4);")
             
 
 if __name__ == "__main__":

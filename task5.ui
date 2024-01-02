@@ -156,7 +156,7 @@ QPushButton:hover {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="check_person_btn">
+                 <widget class="QPushButton" name="check_btn">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                     <horstretch>0</horstretch>
@@ -197,99 +197,7 @@ QPushButton:hover {
 </string>
                   </property>
                   <property name="text">
-                   <string>Check Person</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="check_password_btn">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>300</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">
-
-QPushButton {
-    background-color: rgb(42, 42, 193);
-color:rgb(255, 255, 255);
-border-radius:5px;
-}
-
-QPushButton:hover {
-    background-color: rgb(19, 32, 150);
-}
-
-
-</string>
-                  </property>
-                  <property name="text">
-                   <string>Check Password</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="check_group_btn">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>300</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">
-
-QPushButton {
-    background-color: rgb(42, 42, 193);
-color:rgb(255, 255, 255);
-border-radius:5px;
-}
-
-QPushButton:hover {
-    background-color: rgb(19, 32, 150);
-}
-
-
-</string>
-                  </property>
-                  <property name="text">
-                   <string>Check Group</string>
+                   <string>Check Permission</string>
                   </property>
                  </widget>
                 </item>
@@ -338,28 +246,28 @@ QPushButton:hover {
                    <item>
                     <widget class="QCheckBox" name="Pesron1">
                      <property name="text">
-                      <string>Pesron 1</string>
+                      <string>Ibrahim</string>
                      </property>
                     </widget>
                    </item>
                    <item>
                     <widget class="QCheckBox" name="Pesron2">
                      <property name="text">
-                      <string>Pesron 2</string>
+                      <string>Omar</string>
                      </property>
                     </widget>
                    </item>
                    <item>
                     <widget class="QCheckBox" name="Pesron3">
                      <property name="text">
-                      <string>Pesron 3</string>
+                      <string>Hazem</string>
                      </property>
                     </widget>
                    </item>
                    <item>
                     <widget class="QCheckBox" name="Pesron4">
                      <property name="text">
-                      <string>Pesron 4</string>
+                      <string>Ahmed Ali</string>
                      </property>
                     </widget>
                    </item>
@@ -381,14 +289,14 @@ QPushButton:hover {
                    <item>
                     <widget class="QCheckBox" name="Pesron5">
                      <property name="text">
-                      <string>Pesron 5</string>
+                      <string>Mohannad</string>
                      </property>
                     </widget>
                    </item>
                    <item>
                     <widget class="QCheckBox" name="Pesron6">
                      <property name="text">
-                      <string>Pesron 6</string>
+                      <string>Hassan</string>
                      </property>
                     </widget>
                    </item>
@@ -603,7 +511,7 @@ QPushButton:hover {
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="result_label">
+        <widget class="QLabel" name="result_label_3">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -620,7 +528,57 @@ QPushButton:hover {
           <string notr="true">color: rgb(220, 0, 4);</string>
          </property>
          <property name="text">
-          <string>Access Denied</string>
+          <string>-</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="result_label_1">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>70</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(220, 0, 4);</string>
+         </property>
+         <property name="text">
+          <string>-</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="result_label_2">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>70</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(220, 0, 4);</string>
+         </property>
+         <property name="text">
+          <string>-</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
