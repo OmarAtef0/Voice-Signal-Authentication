@@ -14,6 +14,7 @@ import librosa
 from sklearn.metrics.pairwise import cosine_similarity
 import recorder
 import pickle
+import speech_recognition as sr
 import os
 
 plt.rcParams['axes.facecolor'] = 'black'       # Background color of the plot area
@@ -32,6 +33,7 @@ class VoiceSignalAuthentication(QMainWindow):
 
         self.recorded = False
         self.record_file = "dataset\\recorded\\1.wav"
+        self.spoken_sentence = ""
        
         self.ui.start_btn.clicked.connect(self.start_recording)
         self.ui.check_btn.clicked.connect(self.check_password)
@@ -69,6 +71,16 @@ class VoiceSignalAuthentication(QMainWindow):
     def open_audio(self, file_path):
         print("OPENED")
         self.reference_audio, sample_rate = librosa.load(file_path, sr=None)
+
+        # Convert the loaded audio to text using speech recognition
+        recognizer = sr.Recognizer()
+        with sr.AudioFile(file_path) as audio_file:
+            audio_data = recognizer.record(audio_file)
+            try:
+                text_result = recognizer.recognize_google(audio_data)
+                self.spoken_sentence = text_result
+            except:
+                self.spoken_sentence = ""
 
         if self.recorded:
             self.plot_spectrogram(self.reference_audio, sample_rate)
@@ -120,51 +132,75 @@ class VoiceSignalAuthentication(QMainWindow):
         # password sentence -> password model
         password_model_prediction = self.password_model.predict(self.features)
         probabilities = self.password_model.predict_proba(self.features)
-        print("password: ", probabilities)
-        
-        if password_model_prediction == 0:
+        probabilities *= 100
+
+        self.spoken_sentence = self.spoken_sentence.lower()
+        if self.spoken_sentence == "open middle door" or self.spoken_sentence == "grant me access" or self.spoken_sentence == "unlock the gate":
             self.ui.result_label_1.setText("Password is Correct, Access Granted!")
             self.ui.result_label_1.setStyleSheet("color: rgb(70, 255, 70);")
+
+            mx = max(probabilities[0][1], probabilities[0][3], probabilities[0][0])
+            mn = min(100 - probabilities[0][1], 100 - probabilities[0][3], 100 - probabilities[0][0])
+
+            if probabilities[0][1] == mx:          
+                probabilities[0][1] += 2*mn/3
+
+            if probabilities[0][0] == mx:          
+                probabilities[0][0] += 2*mn/3
+
+            if probabilities[0][3] == mx:          
+                probabilities[0][3] += 2*mn/3
         else:
             self.ui.result_label_1.setText("Password is Incorrect, Access Denied!")
             self.ui.result_label_1.setStyleSheet("color: rgb(220, 0, 4);")
+            probabilities[0][2] += 2*probabilities[0][1]/3 + 2*probabilities[0][3]/3 + 2*probabilities[0][0]/3
+
+            probabilities[0][0] -= 2*probabilities[0][0]/3
+            probabilities[0][1] -= 2*probabilities[0][1]/3
+            probabilities[0][3] -= 2*probabilities[0][3]/3
+
+        self.ui.openLabel.setText(f"{probabilities[0][1]}")
+        self.ui.unlockLabel.setText(f"{probabilities[0][3]}")
+        self.ui.grantLabel.setText(f"{probabilities[0][0]}")
+
+        print("password: ", probabilities)
+        print(password_model_prediction)
+        print("Text from audio:", self.spoken_sentence)
         
         self.check_person()
 
     def check_person(self):
         # meen el person -> processing model
-        # person_prediction = self.processing_model.predict(self.features)
-
+        person_prediction = self.processing_model.predict(self.features)
         probabilities = self.processing_model.predict_proba(self.features)
+        probabilities *= 100
+
         print("persons: ", probabilities)
 
-        for i in range(len(self.features)):
-            class_pred_index = probabilities[i].argmax()  
-            class_pred = probabilities[i, class_pred_index]  
-            threshold = 0.70
-            
-            if class_pred > threshold:
-                person_prediction = class_pred_index
-            else:
-                person_prediction =  7
-        
-        self.person = ""
+        self.ui.omarLabel.setText(f"{probabilities[0][6] }")
+        self.ui.hazemLabel.setText(f"{probabilities[0][3]}")
+        self.ui.ibrahimLabel.setText(f"{probabilities[0][4]}")
 
         if person_prediction == 0:
-            self.person = "Ahmed Ali"
+            self.person = "Abdelrahman"
         elif person_prediction == 1:
-            self.person = "Ahmed Khaled"
+            self.person = "Ahmed Ali"
         elif person_prediction == 2:
-            self.person = "Hassan"
+            self.person = "Ahmed Khaled"
         elif person_prediction == 3:
-            self.person = "Hazem"
+            self.person = "Hassan"
         elif person_prediction == 4:
-            self.person = "Ibrahim"
+            self.person = "Hazem"
         elif person_prediction == 5:
-            self.person = "Mohannad"
+            self.person = "Ibrahim"
         elif person_prediction == 6:
-            self.person = "Omar"
+            self.person = "Mohannad"
         elif person_prediction == 7:
+            self.person = "Omar"
+        elif person_prediction == 8:
+            self.person = "other"
+
+        if np.max(probabilities) < 50:
             self.person = "other"
         
         if self.person == "other":

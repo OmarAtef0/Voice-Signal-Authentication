@@ -46,7 +46,7 @@ def remove_silence_and_noise(input_audio_path, output_folder, subsegment_duratio
                     print("Speech not recognized. Please try again.")
 
 
-input_audio_path = "ML/new audios/tamer/tamer2.m4a"
+input_audio_path = "ML/new audios/tamer/tamer.mp3"
 output_folder = "ML/new audios/tamer"
 
 remove_silence_and_noise(input_audio_path, output_folder)
