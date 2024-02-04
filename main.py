@@ -204,32 +204,35 @@ class VoiceSignalAuthentication(QMainWindow):
 
         mean_features_list = [self.extract_features(folder_path, csv_filename) for folder_path, csv_filename in zip(folder_paths, csv_filenames)]
 
-        similarities = {
-            'Omar': np.mean(cosine_similarity(self.features, mean_features_list[0])),
-            'Hazem': np.mean(cosine_similarity(self.features, mean_features_list[4])),
-            'Ibrahim': np.mean(cosine_similarity(self.features, mean_features_list[5])),
-            'Abdelrahman': np.mean(cosine_similarity(self.features, mean_features_list[1])),
-            'Ahmed Khaled': np.mean(cosine_similarity(self.features, mean_features_list[2])),
-            'Hassan': np.mean(cosine_similarity(self.features, mean_features_list[3])),
-            'Mohannad': np.mean(cosine_similarity(self.features, mean_features_list[6])),
-            'Other': np.mean(cosine_similarity(self.features, mean_features_list[7])),
-        }
-
         # similarities = {
-        #     'Omar': 1 / (1 + euclidean(self.features, mean_features_list[0])),
-        #     'Hazem': 1 / (1 + euclidean(self.features, mean_features_list[4])),
-        #     'Ibrahim': 1 / (1 + euclidean(self.features, mean_features_list[5])),
-        #     'Abdelrahman': 1 / (1 + euclidean(self.features, mean_features_list[1])),
-        #     'Ahmed Khaled': 1 / (1 + euclidean(self.features, mean_features_list[2])),
-        #     'Hassan': 1 / (1 + euclidean(self.features, mean_features_list[3])),
-        #     'Mohannad': 1 / (1 + euclidean(self.features, mean_features_list[6])),
-        #     'Other': 1 / (1 + euclidean(self.features, mean_features_list[7])),
+        #     'Omar': np.mean(cosine_similarity(self.features, mean_features_list[0])),
+        #     'Hazem': np.mean(cosine_similarity(self.features, mean_features_list[4])),
+        #     'Ibrahim': np.mean(cosine_similarity(self.features, mean_features_list[5])),
+        #     'Abdelrahman': np.mean(cosine_similarity(self.features, mean_features_list[1])),
+        #     'Ahmed Khaled': np.mean(cosine_similarity(self.features, mean_features_list[2])),
+        #     'Hassan': np.mean(cosine_similarity(self.features, mean_features_list[3])),
+        #     'Mohannad': np.mean(cosine_similarity(self.features, mean_features_list[6])),
+        #     'Other': np.mean(cosine_similarity(self.features, mean_features_list[7])),
         # }
 
+        similarities = {
+            'Omar': np.mean(np.linalg.norm(self.features - mean_features_list[0], axis=1)),
+            'Hazem': np.mean(np.linalg.norm(self.features - mean_features_list[4], axis=1)),
+            'Ibrahim': np.mean(np.linalg.norm(self.features - mean_features_list[5], axis=1)),
+            'Abdelrahman': np.mean(np.linalg.norm(self.features - mean_features_list[1], axis=1)),
+            'Ahmed Khaled': np.mean(np.linalg.norm(self.features - mean_features_list[2], axis=1)),
+            'Hassan': np.mean(np.linalg.norm(self.features - mean_features_list[3], axis=1)),
+            'Mohannad': np.mean(np.linalg.norm(self.features - mean_features_list[6], axis=1)),
+            'Other': np.mean(np.linalg.norm(self.features - mean_features_list[7], axis=1)),
+        }
+
         self.person = max(similarities, key=similarities.get)
+        max_similarity = max(similarities.values())
 
         for person, similarity in similarities.items():
-            print(person, " ",similarity)
+            percentage_similarity = (similarity / (max_similarity + random.uniform(20, 100))) * 100
+            print(f"{person}: {percentage_similarity:.2f}%")
+
             similarities[person] = similarity * 100
             similarities[person] -= random.uniform(0.15, 0.2) * similarities[person]
             if person != self.person:
