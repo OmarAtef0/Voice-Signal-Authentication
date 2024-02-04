@@ -227,16 +227,17 @@ class VoiceSignalAuthentication(QMainWindow):
         }
 
         self.person = max(similarities, key=similarities.get)
+        print(self.person)
         max_similarity = max(similarities.values())
 
         for person, similarity in similarities.items():
-            percentage_similarity = (similarity / (max_similarity + random.uniform(20, 100))) * 100
-            print(f"{person}: {percentage_similarity:.2f}%")
+            similarities[person] = (similarity / (max_similarity + random.uniform(20, 100))) * 100
+            print(f"{person}: {similarities[person]:.2f}%")
 
-            similarities[person] = similarity * 100
-            similarities[person] -= random.uniform(0.15, 0.2) * similarities[person]
-            if person != self.person:
-                similarities[person] -= random.uniform(0.5, 0.85) * similarities[person]
+            # similarities[person] = similarity * 100
+            # similarities[person] -= random.uniform(0.15, 0.2) * similarities[person]
+            # if person != self.person:
+            #     similarities[person] -= random.uniform(0.5, 0.85) * similarities[person]
 
         if similarities[self.person] < 65 or self.person == "Other":
             self.ui.result_label_3.setText(f"Person not recognized! , Access Denied!")
