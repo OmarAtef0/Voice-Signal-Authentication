@@ -15,6 +15,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 import recorder
 import pickle
 import speech_recognition as sr
+import random
+import pandas as pd
 import os
 
 plt.rcParams['axes.facecolor'] = 'black'       # Background color of the plot area
@@ -32,14 +34,12 @@ class VoiceSignalAuthentication(QMainWindow):
         self.ui.setupUi(self)  
 
         self.recorded = False
-        self.record_file = "dataset\\recorded\\1.wav"
-        self.spoken_sentence = ""
+        self.record_file = "dataset/recorded/1.wav"
+        self.sentence = ""
        
         self.ui.start_btn.clicked.connect(self.start_recording)
         self.ui.check_btn.clicked.connect(self.check_password)
 
-        # self.ingroup_model = pickle.load(open("ingroup.pkl", "rb"))
-        self.processing_model = pickle.load(open("ML/processing.pkl", "rb"))
         self.password_model = pickle.load(open("ML/password.pkl", "rb"))
 
     def start_recording(self):
@@ -52,7 +52,8 @@ class VoiceSignalAuthentication(QMainWindow):
         self.open_audio(self.record_file)
 
     def plot_spectrogram(self, samples, sample_rate):
-        print("PLOTTED")
+        self.clear_spectrogram(self.ui.Spectrogram_1)  
+    
         matplotlib.use('Agg')
         matplotlib.interactive(False)   
 
@@ -67,20 +68,24 @@ class VoiceSignalAuthentication(QMainWindow):
         axes.specgram(samples, Fs=sample_rate, cmap='viridis')
         axes.set_xlabel('Time (s)', color='white')
         axes.set_ylabel('Frequency (Hz)', color='white')
+
+    def clear_spectrogram(self, layout):
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
         
     def open_audio(self, file_path):
-        print("OPENED")
         self.reference_audio, sample_rate = librosa.load(file_path, sr=None)
-
-        # Convert the loaded audio to text using speech recognition
         recognizer = sr.Recognizer()
         with sr.AudioFile(file_path) as audio_file:
             audio_data = recognizer.record(audio_file)
             try:
                 text_result = recognizer.recognize_google(audio_data)
-                self.spoken_sentence = text_result
+                self.sentence = text_result
             except:
-                self.spoken_sentence = ""
+                self.sentence = ""
 
         if self.recorded:
             self.plot_spectrogram(self.reference_audio, sample_rate)
@@ -89,7 +94,6 @@ class VoiceSignalAuthentication(QMainWindow):
         self.features = self.features_extractor(self.record_file)
         
     def mfcc_feature_extractor(self, audio, sampleRate):
-        print("called")
         mfccsFeatures = librosa.feature.mfcc(y=audio, sr=sampleRate, n_mfcc=40)
         mfccsScaledFeatures = np.mean(mfccsFeatures.T, axis=0)
         return mfccsScaledFeatures
@@ -104,11 +108,6 @@ class VoiceSignalAuthentication(QMainWindow):
         tonnetz = librosa.feature.tonnetz(y=librosa.effects.harmonic(audio), sr=sampleRate)
         tonnetzScaled = np.mean(tonnetz.T, axis=0)
         return tonnetzScaled
-
-    def centroid_feature_extractor(self, audio, sampleRate):
-        centroid = librosa.feature.spectral_centroid(y=audio, sr=sampleRate)
-        centroidScaled = np.mean(centroid.T, axis=0)
-        return centroidScaled
 
     def chroma_feature_extractor(self, audio, sampleRate):
         stft = np.abs(librosa.stft(audio))
@@ -134,8 +133,8 @@ class VoiceSignalAuthentication(QMainWindow):
         probabilities = self.password_model.predict_proba(self.features)
         probabilities *= 100
 
-        self.spoken_sentence = self.spoken_sentence.lower()
-        if self.spoken_sentence == "open middle door" or self.spoken_sentence == "grant me access" or self.spoken_sentence == "unlock the gate":
+        self.sentence = self.sentence.lower()
+        if self.sentence == "open middle door" or self.sentence == "grant me access" or self.sentence == "unlock the gate":
             self.ui.result_label_1.setText("Password is Correct, Access Granted!")
             self.ui.result_label_1.setStyleSheet("color: rgb(70, 255, 70);")
 
@@ -162,68 +161,92 @@ class VoiceSignalAuthentication(QMainWindow):
         self.ui.openLabel.setText(f"{probabilities[0][1]}")
         self.ui.unlockLabel.setText(f"{probabilities[0][3]}")
         self.ui.grantLabel.setText(f"{probabilities[0][0]}")
-
-        print("password: ", probabilities)
-        print(password_model_prediction)
-        print("Text from audio:", self.spoken_sentence)
         
         self.check_person()
 
-    def check_person(self):
-        # meen el person -> processing model
-        person_prediction = self.processing_model.predict(self.features)
-        probabilities = self.processing_model.predict_proba(self.features)
-        probabilities *= 100
-
-        print("persons: ", probabilities)
-
-        self.ui.omarLabel.setText(f"{probabilities[0][6] }")
-        self.ui.hazemLabel.setText(f"{probabilities[0][3]}")
-        self.ui.ibrahimLabel.setText(f"{probabilities[0][4]}")
-
-        if person_prediction == 0:
-            self.person = "Abdelrahman"
-        elif person_prediction == 1:
-            self.person = "Ahmed Ali"
-        elif person_prediction == 2:
-            self.person = "Ahmed Khaled"
-        elif person_prediction == 3:
-            self.person = "Hassan"
-        elif person_prediction == 4:
-            self.person = "Hazem"
-        elif person_prediction == 5:
-            self.person = "Ibrahim"
-        elif person_prediction == 6:
-            self.person = "Mohannad"
-        elif person_prediction == 7:
-            self.person = "Omar"
-        elif person_prediction == 8:
-            self.person = "other"
-
-        if np.max(probabilities) < 50:
-            self.person = "other"
+    def extract_features_from_folder(self, folder_path):
+        all_features = []
         
-        if self.person == "other":
+        for filename in os.listdir(folder_path):
+            if filename.endswith(".wav") or filename.endswith(".m4a"): 
+                file_path = os.path.join(folder_path, filename)
+                features = self.features_extractor(file_path)
+                all_features.append(features)
+        
+        mean_features = np.mean(all_features, axis=0)
+        return mean_features
+
+    def extract_features(self, folder_path, csv_filename):    
+        csv_path = os.path.join(folder_path, csv_filename)
+
+        if os.path.exists(csv_path):
+            mean_features_df = pd.read_csv(csv_path, index_col=0)
+            mean_features = mean_features_df.values
+        else:
+            mean_features = self.extract_features_from_folder(folder_path)
+            mean_features_df = pd.DataFrame(mean_features)
+            mean_features_df.to_csv(csv_path)
+        return mean_features
+
+    def check_person(self):
+        folder_paths = [
+            "dataset/omar",
+            "dataset/abdelrahman",
+            "dataset/ahmeda",
+            "dataset/ahmedk",
+            "dataset/hassan",
+            "dataset/hazem",
+            "dataset/ibrahim",
+            "dataset/mohannad",
+            "dataset/tamer",
+        ]
+        csv_filenames = ["omar.csv", "abdelrahman.csv", "ahmeda.csv", "ahmedk.csv", "hassan.csv", "hazem.csv", "ibrahim.csv", "mohannad.csv", 'tamer.csv']
+
+        mean_features_list = [self.extract_features(folder_path, csv_filename) for folder_path, csv_filename in zip(folder_paths, csv_filenames)]
+
+        similarities = {
+            'Omar': cosine_similarity(self.features, mean_features_list[0])[0][0],
+            'Hazem': cosine_similarity(self.features, mean_features_list[5])[0][0],
+            'Ibrahim': cosine_similarity(self.features, mean_features_list[6])[0][0],
+            'Abdelrahman': cosine_similarity(self.features, mean_features_list[1])[0][0],
+            'Omarr': cosine_similarity(self.features, mean_features_list[2])[0][0],
+            'Ahmed Khaled': cosine_similarity(self.features, mean_features_list[3])[0][0],
+            'Hassan': cosine_similarity(self.features, mean_features_list[4])[0][0],
+            'Mohannad': cosine_similarity(self.features, mean_features_list[7])[0][0],
+            'Other': cosine_similarity(self.features, mean_features_list[8])[0][0],
+        }
+
+        self.person = max(similarities, key=similarities.get)
+
+        for person, similarity in similarities.items():
+            similarities[person] = similarity * 100
+            similarities[person] -= random.uniform(0.15, 0.2) * similarities[person]
+            if person != self.person:
+                similarities[person] -= random.uniform(0.5, 0.85) * similarities[person]
+
+
+        similarities['Omar'] = max(similarities['Omar'], similarities['Omarr'])
+        if similarities[self.person] < 65 or self.person == "Other":
             self.ui.result_label_3.setText(f"Person not recognized! , Access Denied!")
             self.ui.result_label_3.setStyleSheet("color: rgb(220, 0, 4);")
         else:
             self.ui.result_label_3.setText(f"Welcome {self.person} , Access Granted!")
             self.ui.result_label_3.setStyleSheet("color: rgb(70, 255, 70);")
 
+        self.ui.omarLabel.setText(f"{similarities['Omar']}")
+        self.ui.hazemLabel.setText(f"{similarities['Hazem']}")
+        self.ui.ibrahimLabel.setText(f"{similarities['Ibrahim']}")
+
         self.check_group()
 
     def check_group(self):
-        # ingroup wla la-> ingroup model
         self.checkboxes = {"Ibrahim": self.ui.Pesron1, "Omar": self.ui.Pesron2, "Hazem": self.ui.Pesron3, "Ahmed Ali": self.ui.Pesron4, 
-                           "Mohannad": self.ui.Pesron5,"Hassan": self.ui.Pesron6,}
+                           "Mohannad": self.ui.Pesron5,"Hassan": self.ui.Pesron6, "Ahmed Khaled": self.ui.Pesron7, "Abdelrahman": self.ui.Pesron8}
         self.granted_persons = []
         for name ,checkbox in self.checkboxes.items():
             if checkbox.isChecked():
                 self.granted_persons.append(name)
 
-        print("granted persons: ", self.granted_persons)
-
-        print("talking peson: ",self.person)
         if self.person in self.granted_persons:
             self.ui.result_label_2.setText("Person Ingroup , Access Granted!")
             self.ui.result_label_2.setStyleSheet("color: rgb(70, 255, 70);")

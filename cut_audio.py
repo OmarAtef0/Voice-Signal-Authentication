@@ -8,30 +8,36 @@ import librosa
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
 from pydub.effects import normalize
+from pydub import AudioSegment
+
+def cut_mp3(input_path, output_path, duration_minutes=10):
+    # Load the MP3 file
+    audio = AudioSegment.from_mp3(input_path)
+
+    # Set the desired duration in milliseconds
+    duration_milliseconds = duration_minutes * 60 * 1000
+
+    # Cut the audio to the specified duration
+    cut_audio = audio[duration_milliseconds:duration_milliseconds*2]
+
+    # Export the cut audio to a new MP3 file
+    cut_audio.export(output_path, format="mp3")
+
 
 def remove_silence_and_noise(input_audio_path, output_folder, subsegment_duration=5000):
     audio = AudioSegment.from_file(input_audio_path)
-
-    # Normalize the audio to enhance the volume
     audio = normalize(audio)
-
-    # Split audio based on silence
     segments = split_on_silence(audio, silence_thresh=-50)
 
     for i, segment in enumerate(segments):
-        # Normalize each segment individually
         segment = normalize(segment)
-
-        # Calculate the number of subsegments
         num_subsegments = len(segment) // subsegment_duration
 
         for j in range(num_subsegments):
-            # Extract subsegment of 5 seconds
             subsegment_start = j * subsegment_duration
             subsegment_end = (j + 1) * subsegment_duration
             subsegment = segment[subsegment_start:subsegment_end]
 
-            # Save the subsegment as a separate audio file
             output_path = os.path.join(output_folder, f"segment_{i + 1}_subsegment_{j + 1}.wav")
             subsegment.export(output_path, format="wav")
 
@@ -46,8 +52,13 @@ def remove_silence_and_noise(input_audio_path, output_folder, subsegment_duratio
                     print("Speech not recognized. Please try again.")
 
 
-input_audio_path = "ML/new audios/tamer/tamer.mp3"
-output_folder = "ML/new audios/tamer"
+input_audio_path = "output_cut.mp3"
+output_folder = "C:/Users/omara/OneDrive/Desktop/second option/dataset/tamer"
+
+input_path = "DSP-Lec6.mp3"
+output_path = "output_cut.mp3"
+
+# cut_mp3(input_path, output_path, duration_minutes=10)
 
 remove_silence_and_noise(input_audio_path, output_folder)
 

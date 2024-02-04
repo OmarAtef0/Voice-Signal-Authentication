@@ -310,7 +310,7 @@ QPushButton:hover {
                    <item>
                     <widget class="QCheckBox" name="Pesron8">
                      <property name="text">
-                      <string>Marwan</string>
+                      <string>Abdo</string>
                      </property>
                     </widget>
                    </item>
@@ -483,6 +483,11 @@ QPushButton:hover {
                    </property>
                    <item>
                     <widget class="QLabel" name="label">
+                     <property name="font">
+                      <font>
+                       <pointsize>15</pointsize>
+                      </font>
+                     </property>
                      <property name="text">
                       <string>Open Middle Door:</string>
                      </property>
@@ -490,6 +495,11 @@ QPushButton:hover {
                    </item>
                    <item>
                     <widget class="QLabel" name="openLabel">
+                     <property name="font">
+                      <font>
+                       <pointsize>15</pointsize>
+                      </font>
+                     </property>
                      <property name="text">
                       <string/>
                      </property>
@@ -515,6 +525,11 @@ QPushButton:hover {
                    </property>
                    <item>
                     <widget class="QLabel" name="label_5">
+                     <property name="font">
+                      <font>
+                       <pointsize>15</pointsize>
+                      </font>
+                     </property>
                      <property name="text">
                       <string>Grant Me Access:</string>
                      </property>
@@ -522,6 +537,11 @@ QPushButton:hover {
                    </item>
                    <item>
                     <widget class="QLabel" name="grantLabel">
+                     <property name="font">
+                      <font>
+                       <pointsize>15</pointsize>
+                      </font>
+                     </property>
                      <property name="text">
                       <string/>
                      </property>
@@ -547,6 +567,11 @@ QPushButton:hover {
                    </property>
                    <item>
                     <widget class="QLabel" name="label_7">
+                     <property name="font">
+                      <font>
+                       <pointsize>15</pointsize>
+                      </font>
+                     </property>
                      <property name="text">
                       <string>Unlock The Gate:</string>
                      </property>
@@ -554,6 +579,11 @@ QPushButton:hover {
                    </item>
                    <item>
                     <widget class="QLabel" name="unlockLabel">
+                     <property name="font">
+                      <font>
+                       <pointsize>15</pointsize>
+                      </font>
+                     </property>
                      <property name="text">
                       <string/>
                      </property>
@@ -654,6 +684,11 @@ QPushButton:hover {
                       </property>
                       <item>
                        <widget class="QLabel" name="label_9">
+                        <property name="font">
+                         <font>
+                          <pointsize>15</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Omar:</string>
                         </property>
@@ -661,6 +696,11 @@ QPushButton:hover {
                       </item>
                       <item>
                        <widget class="QLabel" name="omarLabel">
+                        <property name="font">
+                         <font>
+                          <pointsize>15</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string/>
                         </property>
@@ -686,6 +726,11 @@ QPushButton:hover {
                       </property>
                       <item>
                        <widget class="QLabel" name="label_15">
+                        <property name="font">
+                         <font>
+                          <pointsize>15</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Hazem:</string>
                         </property>
@@ -693,6 +738,11 @@ QPushButton:hover {
                       </item>
                       <item>
                        <widget class="QLabel" name="hazemLabel">
+                        <property name="font">
+                         <font>
+                          <pointsize>15</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string/>
                         </property>
@@ -718,6 +768,11 @@ QPushButton:hover {
                       </property>
                       <item>
                        <widget class="QLabel" name="label_17">
+                        <property name="font">
+                         <font>
+                          <pointsize>15</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Ibrahim:</string>
                         </property>
@@ -725,6 +780,11 @@ QPushButton:hover {
                       </item>
                       <item>
                        <widget class="QLabel" name="ibrahimLabel">
+                        <property name="font">
+                         <font>
+                          <pointsize>15</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string/>
                         </property>
