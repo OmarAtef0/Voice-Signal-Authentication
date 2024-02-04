@@ -17,6 +17,8 @@ import pickle
 import speech_recognition as sr
 import random
 import pandas as pd
+from scipy.spatial.distance import euclidean
+from scipy.stats import pearsonr
 import os
 
 plt.rcParams['axes.facecolor'] = 'black'       # Background color of the plot area
@@ -203,19 +205,31 @@ class VoiceSignalAuthentication(QMainWindow):
         mean_features_list = [self.extract_features(folder_path, csv_filename) for folder_path, csv_filename in zip(folder_paths, csv_filenames)]
 
         similarities = {
-            'Omar': cosine_similarity(self.features, mean_features_list[0])[0][0],
-            'Hazem': cosine_similarity(self.features, mean_features_list[4])[0][0],
-            'Ibrahim': cosine_similarity(self.features, mean_features_list[5])[0][0],
-            'Abdelrahman': cosine_similarity(self.features, mean_features_list[1])[0][0],
-            'Ahmed Khaled': cosine_similarity(self.features, mean_features_list[2])[0][0],
-            'Hassan': cosine_similarity(self.features, mean_features_list[3])[0][0],
-            'Mohannad': cosine_similarity(self.features, mean_features_list[6])[0][0],
-            'Other': cosine_similarity(self.features, mean_features_list[7])[0][0],
+            'Omar': np.mean(cosine_similarity(self.features, mean_features_list[0])),
+            'Hazem': np.mean(cosine_similarity(self.features, mean_features_list[4])),
+            'Ibrahim': np.mean(cosine_similarity(self.features, mean_features_list[5])),
+            'Abdelrahman': np.mean(cosine_similarity(self.features, mean_features_list[1])),
+            'Ahmed Khaled': np.mean(cosine_similarity(self.features, mean_features_list[2])),
+            'Hassan': np.mean(cosine_similarity(self.features, mean_features_list[3])),
+            'Mohannad': np.mean(cosine_similarity(self.features, mean_features_list[6])),
+            'Other': np.mean(cosine_similarity(self.features, mean_features_list[7])),
         }
+
+        # similarities = {
+        #     'Omar': 1 / (1 + euclidean(self.features, mean_features_list[0])),
+        #     'Hazem': 1 / (1 + euclidean(self.features, mean_features_list[4])),
+        #     'Ibrahim': 1 / (1 + euclidean(self.features, mean_features_list[5])),
+        #     'Abdelrahman': 1 / (1 + euclidean(self.features, mean_features_list[1])),
+        #     'Ahmed Khaled': 1 / (1 + euclidean(self.features, mean_features_list[2])),
+        #     'Hassan': 1 / (1 + euclidean(self.features, mean_features_list[3])),
+        #     'Mohannad': 1 / (1 + euclidean(self.features, mean_features_list[6])),
+        #     'Other': 1 / (1 + euclidean(self.features, mean_features_list[7])),
+        # }
 
         self.person = max(similarities, key=similarities.get)
 
         for person, similarity in similarities.items():
+            print(person, " ",similarity)
             similarities[person] = similarity * 100
             similarities[person] -= random.uniform(0.15, 0.2) * similarities[person]
             if person != self.person:
