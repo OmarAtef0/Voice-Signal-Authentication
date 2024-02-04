@@ -129,7 +129,6 @@ class VoiceSignalAuthentication(QMainWindow):
 
     def check_password(self):
         # password sentence -> password model
-        password_model_prediction = self.password_model.predict(self.features)
         probabilities = self.password_model.predict_proba(self.features)
         probabilities *= 100
 
@@ -192,7 +191,6 @@ class VoiceSignalAuthentication(QMainWindow):
         folder_paths = [
             "dataset/omar",
             "dataset/abdelrahman",
-            "dataset/ahmeda",
             "dataset/ahmedk",
             "dataset/hassan",
             "dataset/hazem",
@@ -200,20 +198,19 @@ class VoiceSignalAuthentication(QMainWindow):
             "dataset/mohannad",
             "dataset/tamer",
         ]
-        csv_filenames = ["omar.csv", "abdelrahman.csv", "ahmeda.csv", "ahmedk.csv", "hassan.csv", "hazem.csv", "ibrahim.csv", "mohannad.csv", 'tamer.csv']
+        csv_filenames = ["omar.csv", "abdelrahman.csv", "ahmedk.csv", "hassan.csv", "hazem.csv", "ibrahim.csv", "mohannad.csv", 'tamer.csv']
 
         mean_features_list = [self.extract_features(folder_path, csv_filename) for folder_path, csv_filename in zip(folder_paths, csv_filenames)]
 
         similarities = {
             'Omar': cosine_similarity(self.features, mean_features_list[0])[0][0],
-            'Hazem': cosine_similarity(self.features, mean_features_list[5])[0][0],
-            'Ibrahim': cosine_similarity(self.features, mean_features_list[6])[0][0],
+            'Hazem': cosine_similarity(self.features, mean_features_list[4])[0][0],
+            'Ibrahim': cosine_similarity(self.features, mean_features_list[5])[0][0],
             'Abdelrahman': cosine_similarity(self.features, mean_features_list[1])[0][0],
-            'Omarr': cosine_similarity(self.features, mean_features_list[2])[0][0],
-            'Ahmed Khaled': cosine_similarity(self.features, mean_features_list[3])[0][0],
-            'Hassan': cosine_similarity(self.features, mean_features_list[4])[0][0],
-            'Mohannad': cosine_similarity(self.features, mean_features_list[7])[0][0],
-            'Other': cosine_similarity(self.features, mean_features_list[8])[0][0],
+            'Ahmed Khaled': cosine_similarity(self.features, mean_features_list[2])[0][0],
+            'Hassan': cosine_similarity(self.features, mean_features_list[3])[0][0],
+            'Mohannad': cosine_similarity(self.features, mean_features_list[6])[0][0],
+            'Other': cosine_similarity(self.features, mean_features_list[7])[0][0],
         }
 
         self.person = max(similarities, key=similarities.get)
@@ -224,8 +221,6 @@ class VoiceSignalAuthentication(QMainWindow):
             if person != self.person:
                 similarities[person] -= random.uniform(0.5, 0.85) * similarities[person]
 
-
-        similarities['Omar'] = max(similarities['Omar'], similarities['Omarr'])
         if similarities[self.person] < 65 or self.person == "Other":
             self.ui.result_label_3.setText(f"Person not recognized! , Access Denied!")
             self.ui.result_label_3.setStyleSheet("color: rgb(220, 0, 4);")
@@ -240,8 +235,8 @@ class VoiceSignalAuthentication(QMainWindow):
         self.check_group()
 
     def check_group(self):
-        self.checkboxes = {"Ibrahim": self.ui.Pesron1, "Omar": self.ui.Pesron2, "Hazem": self.ui.Pesron3, "Ahmed Ali": self.ui.Pesron4, 
-                           "Mohannad": self.ui.Pesron5,"Hassan": self.ui.Pesron6, "Ahmed Khaled": self.ui.Pesron7, "Abdelrahman": self.ui.Pesron8}
+        self.checkboxes = {"Ibrahim": self.ui.Pesron1, "Omar": self.ui.Pesron2, "Hazem": self.ui.Pesron3, "Ahmed Ali": self.ui.Pesron4, "Mohannad": self.ui.Pesron5,"Hassan": self.ui.Pesron6, "Ahmed Khaled": self.ui.Pesron7, "Abdelrahman": self.ui.Pesron8}
+
         self.granted_persons = []
         for name ,checkbox in self.checkboxes.items():
             if checkbox.isChecked():
