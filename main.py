@@ -65,6 +65,7 @@ class VoiceSignalAuthentication(QMainWindow):
         axes = figure.add_subplot()
         spectrogram = Canvas(figure)
         self.ui.Spectrogram_1.addWidget(spectrogram)
+        
 
         # Plot the spectrogram
         axes.specgram(samples, Fs=sample_rate, cmap='viridis')
@@ -80,19 +81,9 @@ class VoiceSignalAuthentication(QMainWindow):
         
     def open_audio(self, file_path):
         self.reference_audio, sample_rate = librosa.load(file_path, sr=None)
-        recognizer = sr.Recognizer()
-        with sr.AudioFile(file_path) as audio_file:
-            audio_data = recognizer.record(audio_file)
-            try:
-                text_result = recognizer.recognize_google(audio_data)
-                self.sentence = text_result
-            except:
-                self.sentence = ""
-
         if self.recorded:
             self.plot_spectrogram(self.reference_audio, sample_rate)
 
-        # extract audio features
         self.features = self.features_extractor(self.record_file)
         
     def mfcc_feature_extractor(self, audio, sampleRate):
@@ -134,30 +125,16 @@ class VoiceSignalAuthentication(QMainWindow):
         probabilities = self.password_model.predict_proba(self.features)
         probabilities *= 100
 
-        self.sentence = self.sentence.lower()
-        if self.sentence == "open middle door" or self.sentence == "grant me access" or self.sentence == "unlock the gate":
+        max_index = np.argmax(probabilities)
+        max_element = probabilities[0][max_index]
+        print(probabilities)
+
+        if max_element > 60:
             self.ui.result_label_1.setText("Password is Correct, Access Granted!")
             self.ui.result_label_1.setStyleSheet("color: rgb(70, 255, 70);")
-
-            mx = max(probabilities[0][1], probabilities[0][3], probabilities[0][0])
-            mn = min(100 - probabilities[0][1], 100 - probabilities[0][3], 100 - probabilities[0][0])
-
-            if probabilities[0][1] == mx:          
-                probabilities[0][1] += 2*mn/3
-
-            if probabilities[0][0] == mx:          
-                probabilities[0][0] += 2*mn/3
-
-            if probabilities[0][3] == mx:          
-                probabilities[0][3] += 2*mn/3
         else:
             self.ui.result_label_1.setText("Password is Incorrect, Access Denied!")
             self.ui.result_label_1.setStyleSheet("color: rgb(220, 0, 4);")
-            probabilities[0][2] += 2*probabilities[0][1]/3 + 2*probabilities[0][3]/3 + 2*probabilities[0][0]/3
-
-            probabilities[0][0] -= 2*probabilities[0][0]/3
-            probabilities[0][1] -= 2*probabilities[0][1]/3
-            probabilities[0][3] -= 2*probabilities[0][3]/3
 
         self.ui.openLabel.setText(f"{probabilities[0][1]}")
         self.ui.unlockLabel.setText(f"{probabilities[0][3]}")
@@ -227,17 +204,6 @@ class VoiceSignalAuthentication(QMainWindow):
         }
 
         self.person = max(similarities, key=similarities.get)
-        print(self.person)
-        max_similarity = max(similarities.values())
-
-        for person, similarity in similarities.items():
-            similarities[person] = (similarity / (max_similarity + random.uniform(20, 100))) * 100
-            print(f"{person}: {similarities[person]:.2f}%")
-
-            # similarities[person] = similarity * 100
-            # similarities[person] -= random.uniform(0.15, 0.2) * similarities[person]
-            # if person != self.person:
-            #     similarities[person] -= random.uniform(0.5, 0.85) * similarities[person]
 
         if similarities[self.person] < 65 or self.person == "Other":
             self.ui.result_label_3.setText(f"Person not recognized! , Access Denied!")
